@@ -156,6 +156,7 @@ begin
       check_log_file(log_file_name, entries2);
 
     elsif run("Can use 'instance_name") then
+      tmp_logger := get_logger("olle:");
       tmp_logger := get_logger(tmp_logger'instance_name);
       assert_equal(get_name(tmp_logger), "tmp_logger");
       assert_equal(get_name(get_parent(tmp_logger)), "main");
@@ -164,6 +165,15 @@ begin
 
       assert_equal(get_full_name(get_parent(get_parent(tmp_logger))), "tb_log(a)");
       assert_true(get_logger("tb_log(a):main:tmp_logger") = tmp_logger);
+
+      tmp_logger := get_logger(perform_logging'instance_name);
+      assert_equal(get_name(tmp_logger), "perform_logging[logger_t]");
+      assert_equal(get_name(get_parent(tmp_logger)), "main");
+      assert_equal(get_name(get_parent(get_parent(tmp_logger))), "tb_log(a)");
+      assert_equal(get_full_name(tmp_logger), "tb_log(a):main:perform_logging[logger_t]");
+
+      assert_equal(get_full_name(get_parent(get_parent(tmp_logger))), "tb_log(a)");
+      assert_true(get_logger("tb_log(a):main:perform_logging[logger_t]") = tmp_logger);
 
     elsif run("level format") then
       set_format(display_handler, format => level);
@@ -625,9 +635,6 @@ begin
 
       tmp_logger := get_logger("");
       check_core_failure("Invalid logger name """"");
-
-      tmp_logger := get_logger("parent:");
-      check_core_failure("Invalid logger name ""parent:""");
 
       unmock_core_failure;
 
