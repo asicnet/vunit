@@ -845,6 +845,7 @@ avoid location preprocessing of other functions sharing name with a VUnit log or
         runner = TestRunner(report,
                             join(self._output_path, "test_output"),
                             verbose=self._args.verbose,
+							quiet=self._args.quiet, # ASICNET-Added
                             num_threads=self._args.num_threads,
                             dont_catch_exceptions=self._args.dont_catch_exceptions)
         runner.run(test_cases)

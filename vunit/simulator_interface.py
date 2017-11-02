@@ -169,7 +169,9 @@ class SimulatorInterface(object):
                 print("Skipping %s due to failed dependencies" % simplify_path(source_file.name))
                 continue
 
-            print('Compiling %s into %s ...' % (simplify_path(source_file.name), source_file.library.name))
+            #print('Compiling %s into %s ...' % (simplify_path(source_file.name), source_file.library.name))   # it is clearer if we all in columns
+            print('Compiling  into %-20s %s ' % ( source_file.library.name, simplify_path(source_file.name)))  # ASICNET-changed
+			
             try:
                 command = None
                 command = self.compile_source_file_command(source_file)
