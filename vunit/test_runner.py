@@ -138,8 +138,9 @@ class TestRunner(object):  # pylint: disable=too-many-instance-attributes
         """
         output_path = create_output_path(self._output_path, test_suite.name)
         output_file_name = join(output_path, "output.txt")
-        if self._quiet:                                # ASICNET-Added
-            print("Logfile: %s" % output_file_name)       # It can be of interest to load the file in a editor
+        
+        print("Logfile: %s" % output_file_name)       # It can be of interest to load the file in a editor ASICNET added
+
         start_time = ostools.get_time()
 
         try:
