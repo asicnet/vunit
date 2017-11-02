@@ -30,7 +30,7 @@ class TestRunner(object):  # pylint: disable=too-many-instance-attributes
     Administer the execution of a list of test suites
     """
     def __init__(self, report, output_path, verbose=False, num_threads=1,
-                 dont_catch_exceptions=False):
+				 dont_catch_exceptions=False, quiet=False ):  # ASICNET-Added quiet
         self._lock = threading.Lock()
         self._local = threading.local()
         self._report = report
@@ -40,7 +40,7 @@ class TestRunner(object):  # pylint: disable=too-many-instance-attributes
         self._stdout = sys.stdout
         self._stderr = sys.stderr
         self._dont_catch_exceptions = dont_catch_exceptions
-
+        self._quiet = quiet # ASICNET-Added
     def run(self, test_suites):
         """
         Run a list of test suites
@@ -105,7 +105,8 @@ class TestRunner(object):  # pylint: disable=too-many-instance-attributes
         Run worker thread
         """
         self._local.output = self._stdout
-
+        print(); # ASICNET-Added a empty line for clearer overview
+        
         while True:
             test_suite = None
             try:
@@ -137,6 +138,8 @@ class TestRunner(object):  # pylint: disable=too-many-instance-attributes
         """
         output_path = create_output_path(self._output_path, test_suite.name)
         output_file_name = join(output_path, "output.txt")
+        if self._quiet:                                # ASICNET-Added
+            print("Logfile: %s" % output_file_name)       # It can be of interest to load the file in a editor
         start_time = ostools.get_time()
 
         try:
@@ -174,7 +177,7 @@ class TestRunner(object):  # pylint: disable=too-many-instance-attributes
         any_not_passed = any(value != PASSED for value in results.values())
 
         with self._lock:  # pylint: disable=not-context-manager
-            if (not write_stdout) and (any_not_passed or self._verbose):
+            if (not write_stdout) and (any_not_passed or self._verbose) and (not self._quiet):  # ASICNET-Added quiet. to much information in the terminal
                 self._print_output(output_file_name)
             self._add_results(test_suite, results, start_time, num_tests, output_file_name)
 

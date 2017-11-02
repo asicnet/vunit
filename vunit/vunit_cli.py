@@ -134,6 +134,11 @@ def _create_argument_parser(description=None, for_documentation=False):
                         default=False,
                         help='Print test output immediately and not only when failure')
 
+# ASICNET-Added --++
+    parser.add_argument('-q', '--quiet', action="store_true",
+                        default=False,
+                        help='Print test output only in output.txt and the path to output.txt in the terminal')
+# ++--
     parser.add_argument('--no-color', action='store_true',
                         default=False,
                         help='Do not color output')
